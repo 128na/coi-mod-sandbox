@@ -1,0 +1,6 @@
+{
+	"id": "ProtoDumpMod",
+	"version": "0.0.1",
+	"primary_dlls": [ "ProtoDumpMod.dll" ],
+	"non_locking_dll_load": true
+}

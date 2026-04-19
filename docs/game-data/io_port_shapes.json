@@ -1,0 +1,7 @@
+﻿[
+  { "id": "IoPortShape_FlatConveyor" },
+  { "id": "IoPortShape_LooseMaterialConveyor" },
+  { "id": "IoPortShape_MoltenMetalChannel" },
+  { "id": "IoPortShape_Pipe" },
+  { "id": "IoPortShape_Shaft" }
+]

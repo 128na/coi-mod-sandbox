@@ -1,0 +1,125 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<OutputType>Library</OutputType>
+		<TargetFramework>net48</TargetFramework>
+		<Configurations>Debug;Release</Configurations>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<WarningLevel>9999</WarningLevel>
+		<LangVersion>latest</LangVersion>
+		<COI_MODS>$(APPDATA)\Captain of Industry\Mods</COI_MODS>
+		<AssemblyName>ProtoDumpMod</AssemblyName>
+		<RootNamespace>ProtoDumpMod</RootNamespace>
+		<DeployToModsFolder>true</DeployToModsFolder>
+		<RequiresSupporterDlc>false</RequiresSupporterDlc>
+		<RequiresTrainsDlc>false</RequiresTrainsDlc>
+	</PropertyGroup>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+		<DefineConstants>DEBUG</DefineConstants>
+		<OutputPath>bin\Debug\</OutputPath>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+		<Optimize>true</Optimize>
+		<OutputPath>bin\Release\</OutputPath>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<UpToDateCheckInput Include="manifest.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</UpToDateCheckInput>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="mscorlib">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\mscorlib.dll</HintPath>
+		</Reference>
+		<Reference Include="netstandard">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\netstandard.dll</HintPath>
+		</Reference>
+		<Reference Include="System">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\System.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Runtime">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\System.Runtime.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Core">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\System.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="System.Xml">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\System.Xml.dll</HintPath>
+		</Reference>
+		<Reference Include="Mafi">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\Mafi.dll</HintPath>
+		</Reference>
+		<Reference Include="Mafi.Core">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\Mafi.Core.dll</HintPath>
+		</Reference>
+		<Reference Include="Mafi.Base">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\Mafi.Base.dll</HintPath>
+		</Reference>
+		<Reference Include="Mafi.Unity">
+			<HintPath>$(COI_ROOT)\Captain of Industry_Data\Managed\Mafi.Unity.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+	<!-- Version generator (copied from ExampleMod2) -->
+	<UsingTask TaskName="ProcessManifest" TaskFactory="RoslynCodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+		<ParameterGroup>
+			<Manifest ParameterType="System.String" Required="true" />
+			<DefaultTitle ParameterType="System.String" Required="true" />
+			<NormalizedVersion Output="true" ParameterType="System.String" />
+			<ManifestVersion Output="true" ParameterType="System.String" />
+			<AuthorName Output="true" ParameterType="System.String" />
+			<DisplayTitle Output="true" ParameterType="System.String" />
+		</ParameterGroup>
+		<Task>
+			<Using Namespace="System.IO" />
+			<Using Namespace="System.Text.RegularExpressions" />
+			<Code Type="Fragment" Language="cs">
+				<![CDATA[
+					string json;
+					try { json = File.ReadAllText(Manifest); }
+					catch { NormalizedVersion = "0.0.0"; AuthorName = "Unknown"; DisplayTitle = DefaultTitle; ManifestVersion = "0.0.0"; return true; }
+					var versionMatch = Regex.Match(json, @"""version""\s*:\s*""([^""]+)""");
+					ManifestVersion = versionMatch.Success ? versionMatch.Groups[1].Value : "0.0.0";
+					var match = Regex.Match(ManifestVersion, @"^(\d+)\.(\d+)(\.(\d+)([a-z]?))?$");
+					if (match.Success) {
+						var patch = match.Groups[4].Success ? match.Groups[4].Value : "0";
+						var suffix = match.Groups[5].Value;
+						int rev = string.IsNullOrEmpty(suffix) ? 0 : char.ToLower(suffix[0]) - 'a' + 1;
+						NormalizedVersion = string.Join(".", match.Groups[1].Value, match.Groups[2].Value, patch, rev);
+					} else { NormalizedVersion = "0.0.0"; }
+					AuthorName = "Unknown";
+					DisplayTitle = DefaultTitle;
+				]]>
+			</Code>
+		</Task>
+	</UsingTask>
+
+	<Target Name="ReadJsonVersion" BeforeTargets="GetAssemblyVersion">
+		<Error Condition="'$(COI_ROOT)' == ''" Text="Environment or project variable 'COI_ROOT' is not set." />
+		<Error Condition="'$(COI_MODS)' == ''" Text="Environment or project variable 'COI_MODS' is not set." />
+		<ProcessManifest Manifest="manifest.json" DefaultTitle="$(TargetName)">
+			<Output TaskParameter="NormalizedVersion" PropertyName="VersionNormalized" />
+			<Output TaskParameter="AuthorName" PropertyName="AuthorName" />
+			<Output TaskParameter="DisplayTitle" PropertyName="DisplayTitle" />
+			<Output TaskParameter="ManifestVersion" PropertyName="ManifestVersion" />
+		</ProcessManifest>
+		<PropertyGroup>
+			<Version>$(VersionNormalized)</Version>
+			<FileVersion>$(VersionNormalized)</FileVersion>
+			<AssemblyVersion>$(VersionNormalized)</AssemblyVersion>
+		</PropertyGroup>
+	</Target>
+
+	<Target Name="DeployToModsFolder" AfterTargets="PostBuildEvent" Condition=" '$(DeployToModsFolder)' == 'true' ">
+		<Copy SourceFiles="$(ProjectDir)\manifest.json" DestinationFolder="$(COI_MODS)\$(TargetName)\" />
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(COI_MODS)\$(TargetName)\" />
+		<Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(COI_MODS)\$(TargetName)\" Condition="'$(Configuration)' == 'Debug'" />
+	</Target>
+</Project>
