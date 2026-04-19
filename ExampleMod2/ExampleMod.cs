@@ -28,6 +28,8 @@ public sealed class ExampleMod : DataOnlyMod {
 
 		// Use data class registration to register other protos such as machines, recipes, etc.
 		registrator.RegisterData<ExampleMachineData>();
+		registrator.RegisterData<FastIronSmeltingData>();
+		registrator.RegisterData<FastFlatConveyorData>();
 
 		// Registers all research from this assembly. See ExampleResearchData.cs for examples.
 		registrator.RegisterDataWithInterface<IResearchNodesData>();

@@ -9,6 +9,8 @@ public partial class ExampleModIds {
 
 		public static readonly RecipeID ExampleSmelting = Ids.Recipes.CreateId("ExampleSmelting");
 
+		public static readonly RecipeID FastIronSmelting = Ids.Recipes.CreateId("FastIronSmelting");
+
 	}
 
 }
