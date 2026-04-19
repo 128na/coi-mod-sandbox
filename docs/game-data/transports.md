@@ -2,51 +2,51 @@
 
 ## Ids.Transports
 
-| フィールド名 | 概要 |
-|---|---|
-| `FlatConveyor` | 固形品コンベア T1 |
-| `FlatConveyorT2` | 固形品コンベア T2 |
-| `FlatConveyorT3` | 固形品コンベア T3 |
-| `FlatConveyorSorter` | 固形品ソーター |
-| `LooseMaterialConveyor` | ルース品コンベア T1 |
-| `LooseMaterialConveyorT2` | ルース品コンベア T2 |
-| `LooseMaterialConveyorT3` | ルース品コンベア T3 |
-| `PipeT1` 〜 `PipeT4` | 液体パイプ各グレード |
+| フィールド名              | 概要                 |
+| ------------------------- | -------------------- |
+| `FlatConveyor`            | 固形品コンベア T1    |
+| `FlatConveyorT2`          | 固形品コンベア T2    |
+| `FlatConveyorT3`          | 固形品コンベア T3    |
+| `FlatConveyorSorter`      | 固形品ソーター       |
+| `LooseMaterialConveyor`   | ルース品コンベア T1  |
+| `LooseMaterialConveyorT2` | ルース品コンベア T2  |
+| `LooseMaterialConveyorT3` | ルース品コンベア T3  |
+| `PipeT1` 〜 `PipeT4`      | 液体パイプ各グレード |
 
 ## Ids.IoPortShapes
 
-| フィールド名 | 用途 |
-|---|---|
-| `FlatConveyor` | 固形品コンベア用ポート |
-| `LooseMaterialConveyor` | ルース品コンベア用ポート |
-| `Pipe` | パイプ用ポート |
-| `MoltenMetalChannel` | 溶融金属チャンネル用ポート |
-| `Shaft` | シャフト用ポート |
+| フィールド名            | 用途                       |
+| ----------------------- | -------------------------- |
+| `FlatConveyor`          | 固形品コンベア用ポート     |
+| `LooseMaterialConveyor` | ルース品コンベア用ポート   |
+| `Pipe`                  | パイプ用ポート             |
+| `MoltenMetalChannel`    | 溶融金属チャンネル用ポート |
+| `Shaft`                 | シャフト用ポート           |
 
 ## Costs.Transports（電力・メンテナンスコスト定数）
 
-| フィールド名 | 内容 |
-|---|---|
+| フィールド名                  | 内容                           |
+| ----------------------------- | ------------------------------ |
 | `ConveyorT1ElectricityPer100` | T1 電力消費（100タイルあたり） |
-| `ConveyorT2ElectricityPer100` | T2 電力消費 |
-| `ConveyorT3ElectricityPer100` | T3 電力消費 |
-| `ConveyorMaintenancePer100T1` | T1 メンテナンスコスト |
-| `ConveyorMaintenancePer100T2` | T2 メンテナンスコスト |
-| `ConveyorMaintenancePer100T3` | T3 メンテナンスコスト |
+| `ConveyorT2ElectricityPer100` | T2 電力消費                    |
+| `ConveyorT3ElectricityPer100` | T3 電力消費                    |
+| `ConveyorMaintenancePer100T1` | T1 メンテナンスコスト          |
+| `ConveyorMaintenancePer100T2` | T2 メンテナンスコスト          |
+| `ConveyorMaintenancePer100T3` | T3 メンテナンスコスト          |
 
 ## TransportProto の主要フィールド
 
-| フィールド名 | 型 | 意味 |
-|---|---|---|
-| `SpeedPerTick` | RelTile1f | アイテムの移動速度（tick毎） |
-| `ThroughputPer60` | Quantity | 60tick毎のスループット |
-| `MaxQuantityPerTransportedProduct` | Quantity | スロット1つあたりの最大積載量 |
-| `TransportedProductsSpacing` | RelTile1f | アイテム間隔 |
-| `BaseElectricityCost` | Electricity | 電力消費（100タイルあたり） |
-| `AllowMixedProducts` | Boolean | 複数種混載可否 |
-| `CanBeBuried` | Boolean | 地中埋設可否 |
-| `ZStepLength` | RelTile1i | スロープのステップ長 |
-| `MaxPillarSupportRadius` | RelTile1i | 支柱の最大サポート半径 |
+| フィールド名                       | 型          | 意味                          |
+| ---------------------------------- | ----------- | ----------------------------- |
+| `SpeedPerTick`                     | RelTile1f   | アイテムの移動速度（tick毎）  |
+| `ThroughputPer60`                  | Quantity    | 60tick毎のスループット        |
+| `MaxQuantityPerTransportedProduct` | Quantity    | スロット1つあたりの最大積載量 |
+| `TransportedProductsSpacing`       | RelTile1f   | アイテム間隔                  |
+| `BaseElectricityCost`              | Electricity | 電力消費（100タイルあたり）   |
+| `AllowMixedProducts`               | Boolean     | 複数種混載可否                |
+| `CanBeBuried`                      | Boolean     | 地中埋設可否                  |
+| `ZStepLength`                      | RelTile1i   | スロープのステップ長          |
+| `MaxPillarSupportRadius`           | RelTile1i   | 支柱の最大サポート半径        |
 
 ## コンストラクタシグネチャ
 
@@ -55,7 +55,7 @@
 ```csharp
 new TransportProto(
     id,
-    strings,
+    strings,　　
     surfaceRelativeHeight,            // ThicknessTilesF
     maxQuantityPerTransportedProduct, // Quantity
     transportedProductsSpacing,       // RelTile1f
@@ -102,15 +102,15 @@ new TransportProto.Gfx(
 
 ## prefab・マテリアルパス（Assets.Base.Transports.ConveyorUnit）
 
-| フィールド名 | 用途 |
-|---|---|
-| `ConveyorUnit_mat` | コンベアのマテリアル |
-| `FlatToFlat_Straight_prefab` | 直線セクション |
-| `FlatToFlat_Turn_prefab` | カーブセクション |
-| `FlatToRampUp_Straight_prefab` | スロープ（上り）直線 |
+| フィールド名                     | 用途                 |
+| -------------------------------- | -------------------- |
+| `ConveyorUnit_mat`               | コンベアのマテリアル |
+| `FlatToFlat_Straight_prefab`     | 直線セクション       |
+| `FlatToFlat_Turn_prefab`         | カーブセクション     |
+| `FlatToRampUp_Straight_prefab`   | スロープ（上り）直線 |
 | `FlatToRampDown_Straight_prefab` | スロープ（下り）直線 |
-| `Port_prefab` | ポート |
-| `PortEnd_prefab` | 終端ポート |
+| `Port_prefab`                    | ポート               |
+| `PortEnd_prefab`                 | 終端ポート           |
 
 ## 重要な制約・注意事項
 
