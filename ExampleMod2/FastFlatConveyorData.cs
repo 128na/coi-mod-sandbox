@@ -34,7 +34,7 @@ internal class FastFlatConveyorData : IModData {
 			isBuildable: t1.IsBuildable,
 			costs: t1.Costs,
 			constructionDurationPerProduct: t1.ConstructionDurationPerProduct,
-			graphics: t1.Graphics
+			graphics: t3.Graphics
 		);
 
 		registrator.PrototypesDb.Add(proto, lockOnInit: false);
